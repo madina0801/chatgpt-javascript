@@ -14,7 +14,9 @@ const openai = new OpenAIApi(config);
 const app = express();
 
 // allow our server to be called from a frontend
-app.use(cors());
+app.use(cors({
+	origin: 'https://chat-bot-mads.netlify.app/'
+}))
 
 // pass json from the frontend to the backend
 app.use(express.json());
