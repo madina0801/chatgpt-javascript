@@ -15,7 +15,7 @@ const app = express();
 
 // allow our server to be called from a frontend
 app.use(cors({
-	origin: 'https://chat-bot-mads.netlify.app/'
+	origin: '*'
 }))
 
 // pass json from the frontend to the backend
