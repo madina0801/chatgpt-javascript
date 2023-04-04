@@ -71,7 +71,7 @@ const handleSubmit = async function (e) {
   loader(botMessage);
 
   // fetch data from a server = get bot's response
-  const response = await fetch('http://localhost:3000/', {
+  const response = await fetch('https://chat-bot-if8d.onrender.com', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
