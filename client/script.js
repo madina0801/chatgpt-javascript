@@ -7,11 +7,11 @@ const chatContainer = document.querySelector('#chat__container');
 let loadInterval;
 
 function loader(el) {
-  el.textContent = '';
+  el.textContent = ' ';
   loadInterval = setInterval(() => {
     el.textContent += '.';
     if (el.textContent === '....') {
-      el.textContent = '';
+      el.textContent = ' ';
     }
   }, 300)
 }
@@ -29,9 +29,52 @@ function typer(el, text) {
 }
 
 function generateId() {
-  const timeBased = Date.now();
-  const randomNum = Math.random();
-  const randomStr = randomNum.toString(16);
+  const timeBasedId = Date.now();
+  console.log(timeBasedId);
 
-  return `id-${timeBased}-${randomStr}`;
+  return `id-${timeBasedId}`;
 }
+
+function chatStripe(isBot, value, uniqueId) {
+  return `
+    <div class="wrapper" ${isBot && 'ai'}>
+      <div class="chat">
+        <div class="profile">
+          <img src="${isBot ? bot : user}" alt="${isBot ? 'bot' : 'user'}" />
+        </div>
+        <div class="message" id="${uniqueId}">${value}</div>
+      </div>
+    </div>
+  `
+}
+
+const handleSubmit = async function (e) {
+  e.preventDefault();
+
+  const data = new FormData(form);
+
+  // user's messages
+  chatContainer.innerHTML += chatStripe(false, data.get('prompt'));
+
+  form.reset();
+
+  // bot's messages
+  const uniqueId = generateId();
+  chatContainer.innerHTML += chatStripe(true, " ", uniqueId);
+
+  window.scrollTo({
+    top: 1000,
+    behavior: "smooth"
+  });
+  // chatContainer.scrollTop = chatContainer.clientHeight;
+
+  const botMessage = document.querySelector(`#${uniqueId}`);
+  loader(botMessage);
+}
+
+form.addEventListener('submit', handleSubmit);
+form.addEventListener('keyup', (e) => {
+  if (e.keyCode === 13) {
+    handleSubmit(e);
+  }
+})
