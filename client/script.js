@@ -10,7 +10,7 @@ function loader(el) {
   el.textContent = ' ';
   loadInterval = setInterval(() => {
     el.textContent += '.';
-    if (el.textContent === '....') {
+    if (el.textContent.length > 4) {
       el.textContent = ' ';
     }
   }, 300)
@@ -30,7 +30,6 @@ function typer(el, text) {
 
 function generateId() {
   const timeBasedId = Date.now();
-  console.log(timeBasedId);
 
   return `id-${timeBasedId}`;
 }
@@ -70,6 +69,31 @@ const handleSubmit = async function (e) {
 
   const botMessage = document.querySelector(`#${uniqueId}`);
   loader(botMessage);
+
+  // fetch data from a server = get bot's response
+  const response = await fetch('http://localhost:3000/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      prompt: data.get('prompt')
+    })
+  })
+
+  clearInterval(loadInterval);
+  botMessage.innerHTML = ' ';
+
+  if(response.ok) {
+    const data = await response.json();
+    const parsedData = data.bot.trim();
+
+    typer(botMessage, parsedData);
+  } else {
+    const err = await response.text();
+    botMessage.innerHTML = 'Something went wrong :(';
+    console.log(err);
+  }
 }
 
 form.addEventListener('submit', handleSubmit);
