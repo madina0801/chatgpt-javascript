@@ -36,7 +36,7 @@ function generateId() {
 
 function chatStripe(isBot, value, uniqueId) {
   return `
-    <div class="wrapper ${isBot && ai}">
+    <div class="wrapper ${isBot && "ai"}">
       <div class="chat">
         <div class="profile">
           <img src="${isBot ? bot : user}" alt="${isBot ? 'bot' : 'user'}" />
